@@ -1,4 +1,6 @@
 (sym_lib_table
   (version 7)
   (lib (name "SHTC3")(type "KiCad")(uri "${KIPRJMOD}/symbols/SHTC3.kicad_sym")(options "")(descr ""))
+  (lib (name "XIAO")(type "KiCad")(uri "${KIPRJMOD}/symbols/Seeed_Studio_XIAO_Series.kicad_sym")(options "")(descr ""))
+  (lib (name "oled")(type "KiCad")(uri "${KIPRJMOD}/symbols/oled.kicad_sym")(options "")(descr ""))
 )
