@@ -15,10 +15,10 @@ To program the XIAO RP2040, follow [this guide](https://wiki.seeedstudio.com/XIA
 <img src="/img/schema.png" alt="Schematic Image" width="600"/>
 
 ## PCB
-<img src="/img/frontPCB.png" alt="Front PCB Image" width="600"/>
-<img src="/img/backPCB.png" alt="Back PCB Image" width="600"/>
+<img src="/img/frontPCB.png" alt="Front PCB Image" width="300"/>
+<img src="/img/backPCB.png" alt="Back PCB Image" width="300"/>
 <img src="/img/3d_back.png" alt="Front 3D PCB Image" width="300"/>
-<img src="/img/3d_front.png" alt="Back 3D PCB Image" width="600"/>
+<img src="/img/3d_front.png" alt="Back 3D PCB Image" width="300"/>
 
 ## BOM
 * 1 100nf capacitor
