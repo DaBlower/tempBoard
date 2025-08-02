@@ -1,0 +1,122 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SHTC3_ADDR = 0x70
+#define OLED_ADDR = 0x3C
+
+// setup oled
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  delay(100);
+}
+
+void loop() {
+  wakeSensor();
+  measure();
+  float humidity;
+  float temperature;
+  read(*humidity, *temperature)
+  displayData(humidity, temperature);
+  
+}
+
+void sleepSensor(){
+  Wire.beginTransmission(SHTC3_ADRR);
+  // send sleep signal
+  Wire.write(0xB0); // MSB
+  Wire.write(0x98); // LSB
+  Wire.endTransmission();
+  delay(1);
+}
+
+void displayData(float humidity, float temperature){
+  display.clearDisplay();
+  // print temperature on the left
+  display.setCursor(0,0);
+  display.print("Temperature: ");
+  display.setCursor(0, 24);
+  display.print(temperature, 1);
+  display.print(" C");
+
+  // print humdity on the right
+  display.setCursor(40, 0);
+  display.print("Humidity: ");
+  display.setCursor(40, 24);
+  display.print(humidity, 1);
+  display.print(" %");
+
+  display.display();
+}
+
+void wakeSensor(){
+  // wake up
+  Wire.beginTransmission(SHTC3_ADDR);
+  // send wakeup signal
+  Wire.write(0x35); // MSB
+  Wire.write(0x17); // LSB
+  Wire.endTransmission();
+  delay(1);
+}
+
+void measure(){
+  // send temperature first with clock stretching
+  Wire.beginTransmission(SHTC3_ADDR);
+  Wire.write(0x7C); // MSB
+  Wire.write(0xA2); // LSB
+  Wire.endTransmission()
+}
+
+void read(float &humidity, float &temperature){
+  Wire.requestFrom(SHTC3_ADDR, 6); // request 6 bytes from the sensor (humidity msb, lsb, crc, temperature msb, lsb, crc)
+  if (Wire.available() < 6) return false; // error if less than 6 bytes are recieved
+
+  uint8_t data[6] // since there are 6 bytes, they will be stored in a array with type uint8_t which is one byte
+  for (int i = 0; i < 6, i++){
+    data[i] = Wire.read(); // read each byte one by one
+  }
+
+  // check CRC for humidity
+  if (checkCRC(data, 2) != data[2]){ // data is a pointer to the first value in the array and data[2] is the location of the crc in the response
+    // make the oled say something
+  }
+
+  // check CRC for temperature  
+  if (checkCRC(data + 2, 2), data[5]){ // the temperature data is 2 spaces after the first value 
+    // make the oled say something
+  }
+
+  // convert data into one 16 bit number
+  uint16_t raw_humidity, raw_temperature;
+  raw_humidity = (data[0] << 8) | data[1];
+  raw_temperature = (data[3] << 8) | data[4];
+
+  float humidity, temperature;
+  humidity = 100.0f * (raw_humidity / 65536.0f);
+  temperature = -45.0f + (175.0f * (raw_temperature / 65536.0f));
+  
+  return humidity, temperature
+}
+
+
+uint8_t checkCRC(uint8_t *data, uint8_t len){ // * is the location of the data
+  uint8_t ecrc = 0xFF; // the initialisation
+  for (uint8_t i = 0; i < len; i++){ // iterate over each byte
+    crc ^= data[i]; // apply XOR (if the inputs don't match, then return 1 else 0)
+    for (uint8_t bit = 0; bit < 8; bit++){ // iterate over every bit in the byte from earlier
+      if (crc & 0x80) crc = (crc << 1) ^ 0x31; // check if the polynomial needs to be applied (if the msb is 1 then yes)
+      else crc << 1; // if not, then just shift the crc by one
+    }
+  }
+  return crc;
+}
