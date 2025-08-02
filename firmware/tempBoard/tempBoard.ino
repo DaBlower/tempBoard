@@ -5,6 +5,19 @@
 #define SHTC3_ADDR 0x70
 #define OLED_ADDR 0x3C
 
+#define TEMP_LED D7
+#define HUM_LED D8 
+
+// tolerances for turning on the warning leds
+const float TEMP_ON = 30.0;
+const float TEMP_OFF = 28.0;
+const float HUM_ON = 70.0;
+const float HUM_OFF = 65.0;
+
+bool tempWarning = false;
+bool humidityWarning = false;
+
+
 // setup oled
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -12,13 +25,15 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
+  pinMode(TEMP_LED, OUTPUT);
+  pinMode(HUM_LED, OUTPUT);
   Serial.begin(9600);
   Wire.begin();
 
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
-  display.begin();
+  display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   delay(100);
 }
 
@@ -30,6 +45,27 @@ void loop() {
   if (read(humidity, temperature)){ // if reading succeded, then display data
     displayData(humidity, temperature);
   }
+
+  // temperature warning
+  if (!tempWarning && temperature >= TEMP_ON){
+    digitalWrite(TEMP_LED, HIGH);
+    tempWarning = true;
+  }
+  else if (tempWarning && temperature <= TEMP_OFF){
+    digitalWrite(TEMP_LED, LOW);
+    tempWarning = false;
+  }
+
+  // humidity warning
+  if (!humidityWarning && humidity >= HUM_ON){
+    digitalWrite(HUM_LED, HIGH);
+    humidityWarning = true;
+  }
+  else if (humidityWarning && humidity <= HUM_OFF){
+    digitalWrite(HUM_LED, LOW);
+    humidityWarning = false;
+  }
+
   sleepSensor();
   delay(2000);
 }
@@ -103,7 +139,7 @@ bool read(float &humidity, float &temperature){
   }
 
   // check CRC for temperature  
-  if (checkCRC(data + 2, 2), data[5]){ // the temperature data is 2 spaces after the first value 
+  if (checkCRC(data + 2, 2) != data[5]){ // the temperature data is 2 spaces after the first value 
     displayError();
     return false;
   }
