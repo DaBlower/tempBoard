@@ -2,8 +2,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#define SHTC3_ADDR = 0x70
-#define OLED_ADDR = 0x3C
+#define SHTC3_ADDR 0x70
+#define OLED_ADDR 0x3C
 
 // setup oled
 #define SCREEN_WIDTH 128
@@ -18,6 +18,7 @@ void setup() {
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
+  display.begin();
   delay(100);
 }
 
@@ -26,13 +27,15 @@ void loop() {
   measure();
   float humidity;
   float temperature;
-  read(*humidity, *temperature)
-  displayData(humidity, temperature);
-  
+  if (read(humidity, temperature)){ // if reading succeded, then display data
+    displayData(humidity, temperature);
+  }
+  sleepSensor();
+  delay(2000);
 }
 
 void sleepSensor(){
-  Wire.beginTransmission(SHTC3_ADRR);
+  Wire.beginTransmission(SHTC3_ADDR);
   // send sleep signal
   Wire.write(0xB0); // MSB
   Wire.write(0x98); // LSB
@@ -74,26 +77,35 @@ void measure(){
   Wire.beginTransmission(SHTC3_ADDR);
   Wire.write(0x7C); // MSB
   Wire.write(0xA2); // LSB
-  Wire.endTransmission()
+  Wire.endTransmission();
 }
 
-void read(float &humidity, float &temperature){
+void displayError(){
+  display.clearDisplay();
+  display.setCursor(24,4);
+  display.print("CRC ERROR!");
+  display.display();
+}
+
+bool read(float &humidity, float &temperature){
   Wire.requestFrom(SHTC3_ADDR, 6); // request 6 bytes from the sensor (humidity msb, lsb, crc, temperature msb, lsb, crc)
   if (Wire.available() < 6) return false; // error if less than 6 bytes are recieved
 
-  uint8_t data[6] // since there are 6 bytes, they will be stored in a array with type uint8_t which is one byte
-  for (int i = 0; i < 6, i++){
+  uint8_t data[6]; // since there are 6 bytes, they will be stored in a array with type uint8_t which is one byte
+  for (int i = 0; i < 6; i++){
     data[i] = Wire.read(); // read each byte one by one
   }
 
   // check CRC for humidity
   if (checkCRC(data, 2) != data[2]){ // data is a pointer to the first value in the array and data[2] is the location of the crc in the response
-    // make the oled say something
+    displayError();
+    return false;
   }
 
   // check CRC for temperature  
   if (checkCRC(data + 2, 2), data[5]){ // the temperature data is 2 spaces after the first value 
-    // make the oled say something
+    displayError();
+    return false;
   }
 
   // convert data into one 16 bit number
@@ -101,16 +113,15 @@ void read(float &humidity, float &temperature){
   raw_humidity = (data[0] << 8) | data[1];
   raw_temperature = (data[3] << 8) | data[4];
 
-  float humidity, temperature;
   humidity = 100.0f * (raw_humidity / 65536.0f);
   temperature = -45.0f + (175.0f * (raw_temperature / 65536.0f));
-  
-  return humidity, temperature
+
+  return true;
 }
 
 
 uint8_t checkCRC(uint8_t *data, uint8_t len){ // * is the location of the data
-  uint8_t ecrc = 0xFF; // the initialisation
+  uint8_t crc = 0xFF; // the initialisation
   for (uint8_t i = 0; i < len; i++){ // iterate over each byte
     crc ^= data[i]; // apply XOR (if the inputs don't match, then return 1 else 0)
     for (uint8_t bit = 0; bit < 8; bit++){ // iterate over every bit in the byte from earlier
