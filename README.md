@@ -1,6 +1,6 @@
 # TempBoard
 ![](https://hackatime-badge.hackclub.com/U092DB4LGMP/tempBoard) <br/>
-A PCB that shows temperature and relative humidity on a 128x64px OLED screen using the SHTC3 sensor
+A PCB that shows temperature and relative humidity on a 128x64px OLED screen using a SHTC3 sensor
 
 ## Features
 - An SHTC3 temperature and relative humidity sensor gets data about temperature and relative humidity
