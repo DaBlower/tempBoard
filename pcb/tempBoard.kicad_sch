@@ -677,23 +677,25 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U"
-				(at -3.81 6.35 0)
+			(property "Reference" "U1"
+				(at 6.35 1.2701 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
 			(property "Value" "SHTC3"
-				(at -2.54 -6.35 0)
+				(at 6.35 -1.2699 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
-			(property "Footprint" "Sensor_Humidity:Sensirion_DFN-4-1EP_2x2mm_P1mm_EP0.7x1.6mm"
+			(property "Footprint" "general:Sensirion_DFN-4-1EP_2x2mm_P1mm_EP0.7x1.6mm"
 				(at 5.08 -8.89 0)
 				(effects
 					(font
@@ -826,6 +828,24 @@
 					(at 5.08 0 180)
 					(length 2.54) hide
 					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "VSS"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1867,6 +1887,16 @@
 	)
 	(wire
 		(pts
+			(xy 85.09 99.06) (xy 87.63 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ef02144-543e-417e-a26a-509b8b4e679b")
+	)
+	(wire
+		(pts
 			(xy 223.52 68.58) (xy 223.52 69.85)
 		)
 		(stroke
@@ -1884,6 +1914,16 @@
 			(type default)
 		)
 		(uuid "4b2739d7-b93b-46c4-b1a3-386b5a07f189")
+	)
+	(wire
+		(pts
+			(xy 85.09 97.79) (xy 85.09 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b42cda6-0bf8-44ed-a03d-8d118e24d8fd")
 	)
 	(wire
 		(pts
@@ -2829,6 +2869,9 @@
 		)
 		(pin "2"
 			(uuid "4e3af1ef-838e-4e28-8062-f65a2d3f0e0f")
+		)
+		(pin "5"
+			(uuid "01d96d00-8619-415e-b0e2-0827b6b1a923")
 		)
 		(instances
 			(project ""
