@@ -3,8 +3,10 @@
 A PCB that shows temperature and relative humidity on a 128x64px OLED screen using the SHTC3 sensor
 
 ## Features
-- OLED display that shows temperature and humidity
-- Indicator LEDs that light up when
+- An SHTC3 temperature and relative humidity sensor gets data about temperature and relative humidity
+- OLED display that shows the data
+- Indicator LEDs that light up when the temperature or humidity gets extreme
+- A XIAO RP2040 microcontroller
 
 ## Files
 To program the XIAO RP2040, follow [this guide](https://wiki.seeedstudio.com/XIAO-RP2040-with-Arduino/) and open [this file](/firmware/tempBoard/tempBoard.ino) in the Arduino IDE.
