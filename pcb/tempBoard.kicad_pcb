@@ -4247,7 +4247,7 @@
 		(uuid "da7f3ba5-2626-4bed-aa3f-938f0044561f")
 	)
 	(gr_text "this is\na decoupling\ncapactitor,\nit filters out noise"
-		(at 177 87.45 -0)
+		(at 177.75 86.91 -0)
 		(layer "B.SilkS")
 		(uuid "171bfa8e-4edd-4b9d-b6d7-21c0bdd4ce5c")
 		(effects
@@ -4308,6 +4308,19 @@
 			(justify bottom mirror)
 		)
 	)
+	(gr_text "tempBoard is a device\nthat measures temperature\nand humidity and shows\nit on a screen"
+		(at 162.38 93.49 0)
+		(layer "B.SilkS")
+		(uuid "b83e87c9-60a8-4dde-ada1-f8b31a0455a5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.2)
+				(bold yes)
+			)
+			(justify bottom mirror)
+		)
+	)
 	(gr_text "self-promotion\n(pls scan)"
 		(at 165.95 83.15 -0)
 		(layer "B.SilkS")
@@ -4333,7 +4346,7 @@
 			(justify bottom mirror)
 		)
 	)
-	(gr_text "tempBoard REV 1"
+	(gr_text "tempBoard REV 2"
 		(at 169.85 114.95 0)
 		(layer "F.SilkS")
 		(uuid "5a7980f0-2d53-4982-a046-21dab9821140")
