@@ -2672,7 +2672,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "33"
+		(property "Value" "200"
 			(at 226.06 74.9299 0)
 			(effects
 				(font
@@ -3205,7 +3205,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "LED_BLUE"
+		(property "Value" "LED_GREEN"
 			(at 227.33 86.6774 90)
 			(effects
 				(font
@@ -3214,7 +3214,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_1206_3216Metric"
+		(property "Footprint" "LED_SMD:LED_0805_2012Metric"
 			(at 223.52 83.82 0)
 			(effects
 				(font
@@ -3275,7 +3275,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "68"
+		(property "Value" "47"
 			(at 207.01 74.9299 0)
 			(effects
 				(font
@@ -3690,7 +3690,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_1206_3216Metric"
+		(property "Footprint" "LED_SMD:LED_0805_2012Metric"
 			(at 204.47 83.82 0)
 			(effects
 				(font
